@@ -3,12 +3,13 @@ import { ActionManager, ExecuteCodeAction, Scalar, Vector3 } from "@babylonjs/co
 
 export class PlayerMovement {
     constructor(scene) {
+        // setup ActionManager
         scene.actionManager = new ActionManager(scene);
 
         this.inputMap = {};
+        // listen for keyboard keydown and keyup trigger
         scene.actionManager.registerAction(
             new ExecuteCodeAction(ActionManager.OnKeyDownTrigger, (e) => {
-                // this.inputMap[e.sourceEvent.key] = e.sourceEvent.type == 'keydown';
                 if (e.sourceEvent.type == 'keydown') {
                     this.inputMap[e.sourceEvent.key] = true;
                 }
@@ -26,12 +27,13 @@ export class PlayerMovement {
     }
 
     _updateFromKeyboard() {
-        // attack
+        // detect e for attack, if pressed change attack state
         if (this.inputMap['e']) {
             this.attack = true;
         } else {
             this.attack = false;
         }
+        // detect w and s for vertical movement, if pressed change vertical
         if (this.inputMap['w'] && !this.attack) {
             this.vertical = Scalar.Lerp(this.vertical, -1, .2);
             this.verticalAxis = -1;
@@ -43,6 +45,7 @@ export class PlayerMovement {
             this.verticalAxis = 0;
         }
 
+        // detect a and d for horizontal movement, if pressed change vertical
         if (this.inputMap['a'] && !this.attack) {
             this.horizontal = Scalar.Lerp(this.horizontal, 1, .2);
             this.horizontalAxis = 1;
@@ -53,12 +56,15 @@ export class PlayerMovement {
             this.horizontal = 0;
             this.horizontalAxis = 0;
         }
+
+        // detect shift to dash
         if (this.inputMap['Shift']) {
             this.dash = true;
         } else {
             this.dash = false;
         }
-        // jump
+
+        // detect space to jump
         if (this.inputMap[' ']) {
             this.jump = true; 
         } else {

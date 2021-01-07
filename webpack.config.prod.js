@@ -9,7 +9,7 @@ module.exports = {
     mode: 'production',
     entry: path.resolve(baseDir, 'src/app.js'),
     output: {
-        publicPath: '/gekkou-cg-final-project/'
+        publicPath: '/cg-final-project/'
     },
     plugins: [
         new HtmlWebpackPlugin({

@@ -3,6 +3,7 @@ import { AnimationGroup, Color3, Mesh, PointLight, Vector3 } from "@babylonjs/co
 
 export class Lamp {
     constructor(lightMaterial, mesh, scene, position, animationGroups) {
+        // assign scene and light material / texture for future use
         this._scene = scene;
         this._lightMaterial = lightMaterial;
 
@@ -17,10 +18,12 @@ export class Lamp {
 
         this.spinAnimation = animationGroups;
 
+        // load lamp when lamp is instantiated
         this._loadLamp(mesh, position);
     }
 
     _loadLamp(mesh, position) {
+        // set lamp position, size, and isPickable to false
         this.mesh = mesh;
         this.mesh.scaling = new Vector3(0.8, 0.8, 0.8);
         this.mesh.setAbsolutePosition(position);
@@ -28,12 +31,11 @@ export class Lamp {
     }
 
     setTexture() {
+        // when lamp is turned on apply new material / texture
         this.isOn = true;
-        // lamp default animation
-        // this.spinAnimation.play();
-        // console.log(this.spinAnimation.isPlaying);
         this.mesh.material = this._lightMaterial;
 
+        // set pointlight from the lamp to have a glow effect (more realistic)
         const lighting = new PointLight('lamp ligthing', this.mesh.getAbsolutePosition(), this._scene);
         lighting.intensity = 30;
         lighting.radius = 2;
@@ -42,6 +44,7 @@ export class Lamp {
         this._findNearestLamp(lighting);
     }
 
+    // push the texture and light to the lamp
     _findNearestLamp(lighting) {
         this._scene.getMeshByName('__root__').getChildMeshes().forEach(m => {
             if (this._lightSphere.intersectsMesh(m)) {

@@ -10,16 +10,19 @@ import {
 
 export class GameHud {
     constructor(scene) {
+        // assign scene for future use
         this._scene = scene;
 
+        // instantiate babylon ui featuer
         const gameUI = AdvancedDynamicTexture.CreateFullscreenUI('ui');
         this._gameUI = gameUI;
         this._gameUI.idealHeight = 720;
 
+        // first npc and lamp counter when player just started the game
         this.npcDefeatedCount = 0;
         this.playerHealth = 100;
 
-        // lamp counter
+        // lamp counter game HUD setup
         const lampCount = new TextBlock();
         lampCount.name = 'lamp turned on';
         lampCount.textVerticalAlignment = TextBlock.VERTICAL_ALIGNMENT_CENTER;
@@ -36,7 +39,7 @@ export class GameHud {
         gameUI.addControl(lampCount);
         this._lampCount = lampCount;
 
-        // npc counter
+        // npc counter game HUD setup
         const npcCount = new TextBlock();
         npcCount.name = 'enemy defeated';
         npcCount.textVerticalAlignment = TextBlock.VERTICAL_ALIGNMENT_CENTER;
@@ -53,15 +56,12 @@ export class GameHud {
         gameUI.addControl(npcCount);
         this._npcCount = npcCount;
 
-        // this._setupPlayerHealth();
-        // player health bar
+        // player health  game HUD setup
         const playerHealth = new TextBlock();
         playerHealth.width = "25%";
         playerHealth.text = '❤️ 100 / 100';
         playerHealth.color = 'red';
         playerHealth.fontSize = '25px';
-        // playerHealth.sourceWidth = 36;
-        // playerHealth.sourceHeight = 108;
         playerHealth.verticalAlignment = 0;
         playerHealth.horizontalAlignment = 0;
         playerHealth.left = "0";
@@ -69,35 +69,39 @@ export class GameHud {
         gameUI.addControl(playerHealth);
         this._playerHealth = playerHealth;
 
-
+        // assign babylon ui object
         this.gameUI = gameUI;
     }
 
-    _updateHud() {}
-
+    // update the lamp counter game HUD real time
     _updateLamp(lampsCount) {
         this._lampCount.text = '🏮 Lamp: ' + lampsCount + " / 22";
     }
 
+    // update the npc counter game HUD real time
     _updateNpcDefeated(npcDefeatedCount) {
+        // if the npc counter increases
         if (npcDefeatedCount > this.npcDefeatedCount) {
             this.npcDefeatedCount = npcDefeatedCount;
             this._npcCount.text = '🐍 Enemy defeated: ' + npcDefeatedCount + ' / 3';
         }
     }
 
-    _setupPlayerHealth() {}
-
+    // update the player health real time
     _updatePlayerHealth(playerHealth) {
         this.playerHealth = playerHealth;
+        // if the player health is 0
         if (playerHealth < 0) {
             this._playerHealth.text = '❤️ 0 / 100';
         } else {
+            // if not change the text based on current health
             this._playerHealth.text = '❤️ ' + playerHealth + ' / 100';
         }
         if (playerHealth < 25) {
+            // if player health below 25 change color to white
             this._playerHealth.color = 'white';
         } else if (playerHealth < 65) {
+            // if player health below 65 change color to yellow
             this._playerHealth.color = 'yellow';
         }
     }
